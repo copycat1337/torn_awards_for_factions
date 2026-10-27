@@ -1,0 +1,198 @@
+{% extends "admin_base.html" %}
+{% block title %}Admin Dashboard — Ghost Protocol{% endblock %}
+{% block page_title %}Control Panel{% endblock %}
+{% block page_subtitle %}Manage users, awards, and assign awards to faction members{% endblock %}
+
+{% block content %}
+<div class="admin-container">
+
+    <div class="tabs">
+        <button class="tab-btn active" data-tab="assign">🎯 Assign Awards</button>
+        <button class="tab-btn" data-tab="users">👥 Manage Users</button>
+        <button class="tab-btn" data-tab="awards">🏆 Manage Awards</button>
+    </div>
+
+    <section class="tab-content active" id="tab-assign">
+        <div class="panel-grid">
+            <div class="panel">
+                <h3>Select Member</h3>
+                <input type="text" id="assign-user-search" placeholder="Search member..." class="input-search">
+                <ul class="select-list" id="assign-user-list"></ul>
+            </div>
+
+            <div class="panel">
+                <h3 id="assign-title">Awards for: <span class="highlight">—</span></h3>
+                <div class="award-assign-grid" id="assign-award-grid">
+                    <p class="empty-msg">Select a member to assign awards.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="tab-content" id="tab-users">
+        <div class="panel">
+            <div class="panel-top">
+                <h3>All Users</h3>
+                <button class="btn-primary" onclick="openUserModal()">+ Add User</button>
+            </div>
+            <table class="data-table" id="users-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Member</th>
+                        <th>Permission</th>
+                        <th>Role</th>
+                        <th>Category</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </section>
+
+    <section class="tab-content" id="tab-awards">
+        <div class="panel">
+            <div class="panel-top">
+                <h3>All Awards</h3>
+                <button class="btn-primary" onclick="openAwardModal()">+ Add Award</button>
+            </div>
+            <table class="data-table" id="awards-table">
+                <thead>
+                    <tr>
+                        <th>ID</th><th>Icon</th><th>Name</th>
+                        <th>Description</th><th>Color</th><th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </section>
+</div>
+
+<div class="modal" id="user-modal">
+    <div class="modal-box">
+        <h3 id="user-modal-title">Add User</h3>
+        <form id="user-form" onsubmit="submitUserForm(event)">
+            <input type="hidden" id="user-id">
+            <input type="hidden" id="user-profile-pic">
+
+            <div class="avatar-upload-row">
+                <img id="user-avatar-preview"
+                     src="{{ url_for('static', filename='img/default_avatar.png') }}"
+                     class="avatar-preview"
+                     alt="Avatar preview">
+                <div class="avatar-upload-controls">
+                    <label class="btn-sm" for="user-avatar-file">📷 Choose Picture</label>
+                    <input type="file" id="user-avatar-file" accept="image/*" hidden>
+                    <small class="hint">PNG / JPG / WEBP · max 2 MB</small>
+                </div>
+            </div>
+
+            <label>Username <input type="text" id="user-username" required></label>
+            <label>Password <input type="password" id="user-password" placeholder="Leave blank to keep unchanged"></label>
+
+            <label>Permission
+                <select id="user-role">
+                    <option value="member">member</option>
+                    <option value="admin">admin</option>
+                </select>
+            </label>
+
+            <label>Category
+                <select id="user-category">
+                    <option value="fame">Hall of Fame</option>
+                    <option value="shame">Hall of Shame</option>
+                    <option value="friend">Friends</option>
+                </select>
+            </label>
+
+            <label>Role <input type="text" id="user-user-role" placeholder="Member, Co-Leader, Leader..."></label>
+            <label>Torn ID <input type="number" id="user-torn-id" value="0" placeholder="e.g. 1234567"></label>
+
+            <label>Status
+                <select id="user-status">
+                    <option value="Active">Active</option>
+                    <option value="Fallen">Fallen</option>
+                    <option value="Retired">Retired</option>
+                </select>
+            </label>
+
+            <label>Description <input type="text" id="user-description" placeholder="Why they're listed (Shame / Friends only)"></label>
+
+            <label>Quote <input type="text" id="user-quote" value="Silent moves. Loud results."></label>
+
+            <div class="modal-actions">
+                <button type="button" class="btn-secondary" onclick="closeModal('user-modal')">Cancel</button>
+                <button type="submit" class="btn-primary">Save</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="modal" id="award-modal">
+    <div class="modal-box">
+        <h3 id="award-modal-title">Add Award</h3>
+        <form id="award-form" onsubmit="submitAwardForm(event)">
+            <input type="hidden" id="award-id">
+            <input type="hidden" id="award-icon">
+            
+            <div class="avatar-upload-row">
+                <img id="award-icon-preview"
+                     src="{{ url_for('static', filename='img/default_award.png') }}"
+                     class="avatar-preview"
+                     alt="Award icon preview">
+                <div class="avatar-upload-controls">
+                    <label class="btn-sm" for="award-icon-file">📷 Choose Icon</label>
+                    <input type="file" id="award-icon-file" accept="image/*" hidden>
+                    <small class="hint">PNG / JPG / WEBP · max 2 MB</small>
+                </div>
+            </div>
+
+            <label>Award Name <input type="text" id="award-name" required></label>
+            <label>Description <input type="text" id="award-description"></label>
+            <label>How to Earn <input type="text" id="award-how-to-earn" placeholder="Explain how a member earns this award"></label>
+            <label>Color <input type="color" id="award-color" value="#00ffcc"></label>
+
+            <div class="modal-actions">
+                <button type="button" class="btn-secondary" onclick="closeModal('award-modal')">Cancel</button>
+                <button type="submit" class="btn-primary">Save</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="modal" id="award-detail-modal">
+    <div class="modal-box award-detail-box">
+        <button type="button" class="modal-close" onclick="closeModal('award-detail-modal')">×</button>
+
+        <div class="award-detail-icon-wrap">
+            <img id="award-detail-icon" src="" alt="">
+        </div>
+
+        <h2 id="award-detail-name" class="award-detail-name"></h2>
+        <p id="award-detail-description" class="award-detail-description"></p>
+
+        <div class="award-detail-how-to-earn">
+            <h4>HOW TO EARN</h4>
+            <p id="award-detail-how-to-earn"></p>
+        </div>
+
+        <div class="award-detail-stats">
+            <div class="award-detail-stat">
+                <span class="stat-label">TIMES EARNED</span>
+                <span id="award-detail-count" class="stat-value">x1</span>
+            </div>
+            <div class="award-detail-stat">
+                <span class="stat-label">EARNED BY</span>
+                <span id="award-detail-user" class="stat-value">—</span>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/admin.js') }}"></script>
+{% endblock %}

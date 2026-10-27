@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Admin — Ghost Protocol{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body class="admin-body">
+
+    <!-- ============ SIDEBAR ============ -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-brand">
+            <svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="#00e0ff" stroke-width="1.5">
+                <path d="M12 2 L4 6 V12 C4 17 8 21 12 22 C16 21 20 17 20 12 V6 Z"/>
+            </svg>
+            <span class="brand-text">GHOST PROTOCOL</span>
+        </div>
+
+        <nav class="sidebar-nav">
+            <a href="{{ url_for('hall_of_fame') }}" class="sidebar-link">
+                <span class="icon">🏠</span>
+                <span class="label">Hall of Fame</span>
+            </a>
+            <a href="{{ url_for('admin_panel') }}" class="sidebar-link active">
+                <span class="icon">⚙️</span>
+                <span class="label">Dashboard</span>
+            </a>
+
+            <div class="sidebar-divider"></div>
+
+            <a href="#" class="sidebar-link" data-nav-tab="assign">
+                <span class="icon">🎯</span>
+                <span class="label">Assign Awards</span>
+            </a>
+            <a href="#" class="sidebar-link" data-nav-tab="users">
+                <span class="icon">👥</span>
+                <span class="label">Manage Users</span>
+            </a>
+            <a href="#" class="sidebar-link" data-nav-tab="awards">
+                <span class="icon">🏆</span>
+                <span class="label">Manage Awards</span>
+            </a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <span class="version">v1.0</span>
+        </div>
+    </aside>
+
+    <!-- ============ MAIN AREA ============ -->
+    <div class="admin-main">
+
+        <header class="admin-header-bar">
+            <button class="sidebar-toggle" id="sidebar-toggle" aria-label="Toggle sidebar">
+                <span></span><span></span><span></span>
+            </button>
+
+            <div class="header-title">
+                <h1>{% block page_title %}Admin Dashboard{% endblock %}</h1>
+                <p>{% block page_subtitle %}Ghost Protocol Control Center{% endblock %}</p>
+            </div>
+
+            <div class="header-actions">
+                <div class="user-chip">
+                    <span class="dot online"></span>
+                    <div class="user-info">
+                        <strong>{{ session.username }}</strong>
+                        <small>{{ session.role }}</small>
+                    </div>
+                </div>
+                <a href="{{ url_for('logout') }}" class="btn-logout">Logout</a>
+            </div>
+        </header>
+
+        <main class="admin-content">
+            {% block content %}{% endblock %}
+        </main>
+
+        <footer class="admin-footer">
+            <span>Ghost Protocol</span>
+            <span class="divider">—</span>
+            <span class="tagline">STRONGER TOGETHER</span>
+            <span class="divider">—</span>
+            <span>Torn Faction Awards System © 2026</span>
+        </footer>
+    </div>
+
+    <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+    <!-- ============ AWARD DETAIL MODAL (shared) ============ -->
+    <div class="modal award-detail-modal" id="award-detail-modal">
+        <div class="modal-box award-detail-box">
+            <button class="modal-close" onclick="closeModal('award-detail-modal')">✕</button>
+
+            <div class="award-detail-icon-wrap">
+                <img id="award-detail-icon" src="" alt=""
+                     onerror="this.onerror=null;this.src='/static/img/default_award.png'">
+            </div>
+
+            <h2 id="award-detail-name" class="award-detail-name"></h2>
+            <p id="award-detail-description" class="award-detail-description"></p>
+
+            <div class="award-detail-how-to-earn">
+                <h4>HOW TO EARN</h4>
+                <p id="award-detail-how-to-earn"></p>
+            </div>
+
+            <div class="award-detail-stats">
+                <div class="award-detail-stat">
+                    <span class="stat-label">Times Earned</span>
+                    <span class="stat-value" id="award-detail-count">x1</span>
+                </div>
+                <div class="award-detail-stat">
+                    <span class="stat-label">Earned By</span>
+                    <span class="stat-value" id="award-detail-user">—</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% block scripts %}{% endblock %}
+    <script src="{{ url_for('static', filename='js/awards.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/sidebar.js') }}"></script>
+</body>
+</html>

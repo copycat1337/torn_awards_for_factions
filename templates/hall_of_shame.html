@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block title %}Hall of Shame — Ghost Protocol{% endblock %}
+
+{% block content %}
+<div class="hall-container">
+
+    <div class="hall-header shame-header">
+        <h2>💀 Hall of Shame</h2>
+        <p>Wall of infamy. These are the ones who lived down to expectations.</p>
+    </div>
+
+    <div class="hall-grid">
+        {% for user in users %}
+        <div class="player-card shame-card">
+            <div class="card-top">
+                <img src="{{ user.profile_pic }}" class="avatar shame-avatar" alt="{{ user.username }}">
+                <div class="card-id">
+                    <h2>
+                        <span class="username-text">{{ user.username }}</span>
+                    </h2>
+                    <p class="faction shame-faction">Ghost Protocol — Shame</p>
+                    <p class="role-tag">{{ user.user_role or '—' }}</p>
+                </div>
+            </div>
+
+            {% if user.description %}
+            <p class="card-description shame-description">{{ user.description }}</p>
+            {% endif %}
+
+            {% if user.quote %}
+            <p class="quote shame-quote">"{{ user.quote }}"</p>
+            {% endif %}
+
+            <div class="stats">
+                <div><span>Torn ID</span><strong>{{ user.torn_id or '—' }}</strong></div>
+                <div><span>Role</span><strong>{{ user.user_role or '—' }}</strong></div>
+                <div><span>Status</span><strong>{{ user.status or '—' }}</strong></div>
+            </div>
+        </div>
+        {% else %}
+        <p class="empty-msg">Nobody has earned shame yet. Impressive.</p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/profile.js') }}"></script>
+{% endblock %}

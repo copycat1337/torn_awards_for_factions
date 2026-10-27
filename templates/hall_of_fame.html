@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+{% block title %}Hall of Fame — Ghost Protocol{% endblock %}
+
+{% block content %}
+<div class="hall-container">
+
+    <div class="hall-header">
+        <h2>🏆 Hall of Fame</h2>
+        <p>Our top members and award winners. Well earned, legends.</p>
+    </div>
+
+    {% if session.user_id %}
+    <div class="profile-edit-panel" id="my-profile-panel">
+        <button class="btn-secondary" onclick="toggleMyProfile()">✏️ Edit My Profile</button>
+
+        <div class="profile-edit" id="my-profile-form" style="display:none;">
+            <div class="edit-row">
+                <img id="my-avatar-preview" src="" class="avatar-preview" alt="">
+                <div class="avatar-upload-controls">
+                    <label class="btn-sm" for="my-avatar-file">📷 Change Picture</label>
+                    <input type="file" id="my-avatar-file" accept="image/*" hidden>
+                </div>
+            </div>
+
+            <label class="edit-row">
+                <span class="edit-label">Quote</span>
+                <input type="text" id="my-quote" placeholder="Your battle cry...">
+            </label>
+
+            <div class="edit-row" style="justify-content:flex-end;">
+                <button class="btn-sm" onclick="saveMyProfile()">Save</button>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <div class="hall-grid">
+        {% for user in users %}
+        <div class="player-card">
+            <div class="card-top">
+                <img src="{{ user.profile_pic }}" class="avatar" alt="{{ user.username }}">
+                <div class="card-id">
+                    <h2>
+                        <span class="username-text">{{ user.username }}</span>
+                        <span class="dot {% if user.status == 'Active' %}online{% endif %}"></span>
+                    </h2>
+                    <p class="faction">Ghost Protocol</p>
+                    <p class="role-tag">
+                        {% if user.role == 'admin' %}👑 Admin{% else %}{{ user.user_role or 'Member' }}{% endif %}
+                    </p>
+                </div>
+            </div>
+
+            <p class="quote">"{{ user.quote }}"</p>
+
+            <div class="stats">
+                <div><span>Torn ID</span><strong>{{ user.torn_id or '—' }}</strong></div>
+                <div><span>Role</span><strong>{{ user.user_role or '—' }}</strong></div>
+                <div><span>Status</span><strong>{{ user.status or '—' }}</strong></div>
+            </div>
+
+            <h3 class="section-title">AWARDS</h3>
+            <div class="award-grid">
+                {% if user.awards %}
+                    {% for ua in user.awards %}
+                    <div class="award-item"
+                         title="{{ ua.description }}"
+                         onclick='showAwardDetail({
+                             "name": {{ ua.name | tojson }},
+                             "description": {{ (ua.description or "") | tojson }},
+                             "icon_url": {{ ua.icon_url | tojson }},
+                             "color": {{ ua.color | tojson }},
+                             "count": {{ ua.count }},
+                             "username": {{ user.username | tojson }}
+                         })'>
+                        <div class="award-icon" style="border-color: {{ ua.color }};">
+                            <img src="{{ ua.icon_url }}" alt="{{ ua.name }}">
+                            {% if ua.count > 1 %}
+                            <span class="stack-count">x{{ ua.count }}</span>
+                            {% endif %}
+                        </div>
+                        <p class="award-name">{{ ua.name }}</p>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <p class="empty-msg">No awards yet.</p>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/profile.js') }}"></script>
+{% endblock %}

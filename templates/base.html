@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Ghost Protocol{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="app-wrapper">
+        <header class="topbar">
+            <div class="brand">
+                <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="#00e0ff" stroke-width="1.5">
+                    <path d="M12 2 L4 6 V12 C4 17 8 21 12 22 C16 21 20 17 20 12 V6 Z"/>
+                </svg>
+                <div>
+                    <h1>GHOST PROTOCOL</h1>
+                    <span class="subtitle">Faction Awards System</span>
+                </div>
+            </div>
+
+            <nav class="main-nav">
+                <a href="{{ url_for('hall_of_fame') }}" class="{% if request.endpoint == 'hall_of_fame' %}active{% endif %}">
+                    🏆 Hall of Fame
+                </a>
+                <a href="{{ url_for('hall_of_shame') }}" class="{% if request.endpoint == 'hall_of_shame' %}active{% endif %}">
+                    💀 Hall of Shame
+                </a>
+                <a href="{{ url_for('friends_page') }}" class="{% if request.endpoint == 'friends_page' %}active{% endif %}">
+                    🤝 Friends
+                </a>
+                <a href="{{ url_for('awards_library') }}" class="{% if request.endpoint == 'awards_library' %}active{% endif %}">
+                    🎖️ Awards
+                </a>
+                {% if session.role == 'admin' %}
+                <a href="{{ url_for('admin_panel') }}" class="{% if request.endpoint == 'admin_panel' %}active{% endif %}">
+                    ⚙️ Admin Panel
+                </a>
+                {% endif %}
+                <span class="user-badge">
+                    <span class="dot online"></span> {{ session.username }} ({{ session.role }})
+                </span>
+                <a href="{{ url_for('logout') }}" class="btn-logout">Logout</a>
+            </nav>
+        </header>
+
+        <main class="main-content">
+            {% block content %}{% endblock %}
+        </main>
+
+        <footer class="bottom-bar">
+            <span>Ghost Protocol</span>
+            <span class="tagline">— STRONGER TOGETHER —</span>
+            <span>Torn Faction Awards System</span>
+        </footer>
+    </div>
+
+    <div class="modal award-detail-modal" id="award-detail-modal">
+        <div class="modal-box award-detail-box">
+            <button class="modal-close" onclick="closeModal('award-detail-modal')">✕</button>
+
+            <div class="award-detail-icon-wrap">
+                <img id="award-detail-icon" src="" alt="">
+            </div>
+
+            <h2 id="award-detail-name" class="award-detail-name"></h2>
+            <p id="award-detail-description" class="award-detail-description"></p>
+
+            <div class="award-detail-how" id="award-detail-how" style="display:none;">
+                <span class="award-detail-how-label">How to earn</span>
+                <p id="award-detail-how-text"></p>
+            </div>
+        </div>
+    </div>
+
+    {% block scripts %}{% endblock %}
+    <script src="{{ url_for('static', filename='js/awards.js') }}"></script>
+</body>
+</html>

@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}Awards Library — Ghost Protocol{% endblock %}
+
+{% block content %}
+<div class="hall-container">
+
+    <div class="hall-header awards-header">
+        <h2>🏆 Awards Library</h2>
+        <p>Every honor a Ghost Protocol member can earn — and how to get it.</p>
+    </div>
+
+    <div class="awards-library-grid">
+        {% for award in awards %}
+        <div class="awards-library-card"
+             data-name="{{ award.name | e }}"
+             data-description="{{ (award.description or '') | e }}"
+             data-how-to-earn="{{ (award.how_to_earn or '') | e }}"
+             data-icon="{{ award.icon_url | e }}"
+             data-color="{{ award.color | e }}">
+
+            <div class="awards-library-icon" style="border-color: {{ award.color }};">
+                <img src="{{ award.icon_url }}" alt="{{ award.name }}">
+            </div>
+            <h3 class="awards-library-name">{{ award.name }}</h3>
+            <p class="awards-library-desc">{{ award.description }}</p>
+            {% if award.how_to_earn %}
+            <div class="awards-library-how" style="border-left-color: {{ award.color }};">
+                <span class="how-label">How to earn</span>
+                <p>{{ award.how_to_earn }}</p>
+            </div>
+            {% endif %}
+        </div>
+        {% else %}
+        <p class="empty-msg">No awards defined yet.</p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

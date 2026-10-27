@@ -1,0 +1,16 @@
+services:
+  ghost-protocol:
+    build: .
+    container_name: ghost-protocol
+    restart: unless-stopped
+    ports:
+      - "41321:41321"
+    volumes:
+      - ./ghost_protocol.db:/app/ghost_protocol.db
+      - ./static:/app/static
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:41321/login')"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s

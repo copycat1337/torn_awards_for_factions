@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login — Ghost Protocol</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="login-body">
+    <div class="login-container">
+        <div class="login-brand">
+            <svg viewBox="0 0 24 24" width="56" height="56" fill="none" stroke="#00e0ff" stroke-width="1.5">
+                <path d="M12 2 L4 6 V12 C4 17 8 21 12 22 C16 21 20 17 20 12 V6 Z"/>
+                <path d="M12 8 V14 M9 11 H15" stroke-linecap="round"/>
+            </svg>
+            <h1>GHOST PROTOCOL</h1>
+            <p>Faction Hall of Fame</p>
+        </div>
+
+        <form method="POST" class="login-form">
+            <h2>Member Login</h2>
+
+            {% if error %}
+            <div class="alert alert-error">{{ error }}</div>
+            {% endif %}
+
+            <label>
+                <span>Username</span>
+                <input type="text" name="username" required autofocus placeholder="Enter your username">
+            </label>
+
+            <label>
+                <span>Password</span>
+                <input type="password" name="password" required placeholder="Enter your password">
+            </label>
+
+            <button type="submit" class="btn-primary">Sign In</button>
+        </form>
+
+        <p class="login-footer">— STRONGER TOGETHER —</p>
+    </div>
+</body>
+</html>

@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block title %}Friends — Ghost Protocol{% endblock %}
+
+{% block content %}
+<div class="hall-container">
+
+    <div class="hall-header friends-header">
+        <h2>🤝 Friends of Ghost Protocol</h2>
+        <p>Allies, ambassadors, and honorable outsiders who stand with us.</p>
+    </div>
+
+    <div class="hall-grid">
+        {% for user in users %}
+        <div class="player-card friend-card">
+            <div class="card-top">
+                <img src="{{ user.profile_pic }}" class="avatar friend-avatar" alt="{{ user.username }}">
+                <div class="card-id">
+                    <h2>
+                        <span class="username-text">{{ user.username }}</span>
+                        <span class="dot {% if user.status == 'Active' %}online{% endif %}"></span>
+                    </h2>
+                    <p class="faction friend-faction">Ally / Friend</p>
+                    <p class="role-tag">{{ user.user_role or '—' }}</p>
+                </div>
+            </div>
+
+            {% if user.description %}
+            <p class="card-description friend-description">{{ user.description }}</p>
+            {% endif %}
+
+            {% if user.quote %}
+            <p class="quote friend-quote">"{{ user.quote }}"</p>
+            {% endif %}
+
+            <div class="stats">
+                <div><span>Torn ID</span><strong>{{ user.torn_id or '—' }}</strong></div>
+                <div><span>Role</span><strong>{{ user.user_role or '—' }}</strong></div>
+                <div><span>Status</span><strong>{{ user.status or '—' }}</strong></div>
+            </div>
+        </div>
+        {% else %}
+        <p class="empty-msg">No friends added yet.</p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/profile.js') }}"></script>
+{% endblock %}
