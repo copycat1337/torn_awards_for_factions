@@ -1,76 +1,92 @@
 # 👻 Ghost Protocol Awards
 
-A simple awards and recognition website for your Torn faction. Track faction achievements with custom award icons and manage awards through the web app.
+A faction awards and recognition platform for [Torn City](https://www.torn.com/). Celebrate achievements, recognize faction members, and keep track of accomplishments with custom award icons and an easy-to-use web interface.
+
+---
+
+## 📸 Screenshots
+
+Take a look around Ghost Protocol Awards.
+
+| Friends | Hall of Shame |
+|:---:|:---:|
+| ![Friends](pictures/freinds.png) | ![Hall of Shame](pictures/hall_of_shame.png) |
+| **Awards** | **Hall of Fame** |
+| ![Awards](pictures/awards.png) | ![Hall of Fame](pictures/hall_of_fame.png) |
+| **Admin Panel** | **Login Page** |
+| ![Admin Page](pictures/admin_page.png) | ![Login](pictures/login.png) |
 
 ---
 
 ## ✨ Features
 
-- 🏆 Awards for faction achievements
-- 🖼️ Custom PNG icons for each award
-- 🗄️ SQLite database
-- 🔐 Admin login
-- 🐳 Run locally with Python or using Docker Compose
-- ♻️ Supports use with an existing database
+- 🏆 **Faction Awards** — Recognize achievements and accomplishments.
+- 🖼️ **Custom Award Icons** — Personalize awards with PNG images.
+- 👥 **Hall of Fame & Shame** — Highlight faction members and their achievements.
+- 🔐 **Admin Panel** — Manage awards through a protected interface.
+- 🗄️ **SQLite Database** — Lightweight database with no separate database server required.
+- 🐳 **Docker Support** — Run locally with Python or Docker Compose.
+- ♻️ **Existing Database Support** — Continue using an existing database.
 
-## 🚀 Getting Started
+---
 
-Choose **one** of the installation methods below.
+## 🚀 Installation
 
-### Option 1: Run locally with Python
+Choose one of the following installation methods.
 
-#### 1. Install dependencies
+### Option 1 — Run with Python
 
-Run this command from the project directory:
+**1. Install dependencies**
+
+Run from the project directory:
 
 ```bash
 pip install -r requirements.txt
 ```
 
-#### 2. Initialize the database and admin account
+**2. Initialize the database**
 
 ```bash
 python init_db.py
 ```
 
-Follow the prompts to create your admin account:
+Follow the prompts to create your administrator account:
 
-- **Username:** at least 3 characters
-- **Password:** at least 6 characters; enter it twice to confirm
+- Username: At least 3 characters.
+- Password: At least 6 characters.
+- Confirm your password when prompted.
 
-This creates `ghost_protocol.db`, sets up the required tables, and adds the default awards.
+This creates `ghost_protocol.db`, initializes the required tables, and adds the default awards.
 
-> **Using an existing database?** Back it up before running initialization. Only run `init_db.py` against an existing database if you have confirmed that the script is safe to use with it.
+> **Existing database?** Back it up before running initialization. Only run `init_db.py` against an existing database after confirming that the script will preserve your existing data.
 
-#### 3. Start the application
+**3. Start the application**
 
 ```bash
 python app.py
 ```
 
-Open the local address shown in the terminal, if one is displayed.
+Open the local address displayed in the terminal.
 
 ---
 
-### Option 2: Run with Docker Compose
+### Option 2 — Run with Docker Compose
 
-#### 1. Initialize the database and admin account
-
-From the project directory, run:
+**1. Initialize the database**
 
 ```bash
 python init_db.py
 ```
 
-Follow the prompts to create your admin username and password.
+Create your administrator account when prompted.
 
-#### 2. Build and start the app
+**2. Build and start the container**
 
 ```bash
 docker compose up -d --build
 ```
 
-#### 3. Open the app
+**3. Open the application**
 
 Visit:
 
@@ -78,37 +94,30 @@ Visit:
 
 #### Useful Docker commands
 
-View application logs:
+| Action | Command |
+|---|---|
+| View logs | `docker compose logs -f` |
+| Stop application | `docker compose down` |
+| Start application | `docker compose up -d` |
+| Rebuild application | `docker compose up -d --build` |
 
-```bash
-docker compose logs -f
-```
+> **Database:** Make sure `ghost_protocol.db` is stored in a persistent location used by your Docker configuration. Always back it up before rebuilding or replacing application files.
 
-Stop the app:
-
-```bash
-docker compose down
-```
-
-Start it again:
-
-```bash
-docker compose up -d
-```
-
-> **Database note:** Make sure `ghost_protocol.db` is stored in a persistent location used by your Docker setup. Back up the database before rebuilding, migrating, or replacing files.
+---
 
 ## 🖼️ Custom Award Icons
 
-You can replace the award icons with your own images.
+Ghost Protocol Awards supports custom PNG icons for each award.
+
+**Requirements**
 
 | Setting | Requirement |
-| --- | --- |
+|---|---|
 | Format | PNG |
-| Recommended size | 256 × 256 pixels |
+| Recommended resolution | 256 × 256 px |
 | Directory | `static/icons/` |
 
-Keep the filenames exactly as shown:
+**Directory structure:**
 
 ```text
 static/
@@ -123,37 +132,64 @@ static/
     └── respect.png
 ```
 
-To customize an award, replace its corresponding PNG file while keeping the same filename. Using 256 × 256 pixel images is recommended for consistency.
+To customize an award, simply replace its corresponding PNG file while keeping the original filename.
+
+---
 
 ## 🔑 Default Login
 
-If your existing database or setup uses the default credentials, the login may be:
+Some existing installations may use the following default credentials:
 
-- **Username:** `admin`
-- **Password:** `password`
+```text
+Username: admin
+Password: password
+```
 
-> ⚠️ **Security warning:** These default credentials are public and unsafe for an internet-accessible deployment. Change the password immediately if the application supports it. If it does not, configure a secure admin password using the project's supported account-management method before exposing the app to the internet. Never reuse the default password.
+<details>
+<summary>⚠️ Security warning</summary>
 
-When setting up a new database, use the `init_db.py` prompts to create a unique admin password.
+These credentials are publicly known and should never be used on an internet-accessible deployment.
 
-## 🗃️ Using an Existing Database
+For new installations, create a unique administrator password using `init_db.py`. For existing installations, change the default password using the application's supported account-management method.
 
-The application can also be used with an existing database. Before changing application files or initializing the database:
+</details>
 
-1. Stop the application.
-2. Make a backup copy of `ghost_protocol.db`.
-3. Keep the database in the location expected by the app or Docker configuration.
-4. Start the application and verify that your existing awards and data are still present.
+---
 
-Do not delete or replace your database unless you have a verified backup.
+## 🗃️ Existing Database
+
+You can continue using an existing `ghost_protocol.db` database.
+
+Before updating application files:
+
+1. Stop the running application.
+2. Create a backup of `ghost_protocol.db`.
+3. Keep the database in the location expected by the application or Docker configuration.
+4. Restart the application.
+5. Verify that existing awards and faction data are intact.
+
+**Never replace or delete your database without a verified backup.**
+
+---
 
 ## 🛠️ Troubleshooting
 
-- **The page will not open:** Confirm the app is running and check the terminal output or `docker compose logs -f`.
-- **Docker is running but the page is unavailable:** Check that port `41321` is published in your Compose configuration and is not already in use.
-- **Icons are missing:** Confirm the PNG files are in `static/icons/` and that their filenames match the list above.
-- **Database or login issues:** Check the application logs and verify that the app is using the expected database file.
+| Problem | What to check |
+|---|---|
+| Application won't open | Confirm the application is running. |
+| Docker page unavailable | Check port `41321` and container logs. |
+| Missing award icons | Verify filenames and `static/icons/` directory. |
+| Login problems | Check credentials and application logs. |
+| Database issues | Verify the database path and file permissions. |
+
+To inspect Docker logs:
+
+```bash
+docker compose logs -f
+```
+
+---
 
 ## 📄 License
 
-Add a license section here if you intend to publish or distribute the repository. If you already have a `LICENSE` file, link to or name that license here.
+See the repository's `LICENSE` file if one is available. Otherwise, add a license before distributing the project.
